@@ -69,7 +69,7 @@ spec:
           #     port: 8080
           #   periodSeconds: 5
           #   timeoutSeconds: 2
-          #   failureThreshold: 1
+          #   failureThreshold: 1 
           #   successThreshold: 2
           env:
             - name: HOMEPAGE
