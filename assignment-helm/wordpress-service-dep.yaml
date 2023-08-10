@@ -41,8 +41,8 @@ spec:
     image: wordpress:latest
     resources:
       limits:
-        memory: "128Mi"
-        cpu: "500m"
+        memory: "500Mi"
+        cpu: "800m"
     ports:
       - containerPort: 80
     envFrom:
