@@ -1,0 +1,84 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+      type: web
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: nginx
+        type: web
+    spec:
+      # nodeSelector:
+      #   app_type: nginx
+      # affinity:
+      #   nodeAffinity:
+      #     preferredDuringSchedulingIgnoredDuringExecution:
+      #       - weight: 1
+      #         preference:
+      #           matchExpressions:
+      #             - key: cloud.google.com/gke-preemptible
+      #               operator: In
+      #               values:
+      #                 - "true"
+      # tolerations:
+      #   - effect: PreferNoSchedule
+      #     key: type
+      #     operator: Equal
+      #     value: on-demand
+      containers:
+        - name: nginx-web
+          image: nginx:latest
+          imagePullPolicy: IfNotPresent
+          # lifecycle:
+          #   preStop:
+          #     exec:
+          #       command:
+          #         - sleep
+          #         - "5"
+          # resources:
+          #   requests:
+          #     memory: 1Gi
+          #     cpu: "1"
+          #   limits:
+          #     memory: 2Gi
+          #     cpu: "2"
+          ports:
+            - containerPort: 8080
+          # livenessProbe:
+          #   httpGet:
+          #     path: /index.html
+          #     port: 8080
+          #   periodSeconds: 5
+          #   timeoutSeconds: 2
+          #   failureThreshold: 60
+          # readinessProbe:
+          #   httpGet:
+          #     path: /index.html
+          #     port: 8080
+          #   periodSeconds: 5
+          #   timeoutSeconds: 2
+          #   failureThreshold: 1
+          #   successThreshold: 2
+          env:
+            - name: HOMEPAGE
+              valueFrom:
+                configMapKeyRef:
+                  name: nginx-config
+                  key: home_page
+            - name: MESSAGE
+              valueFrom:
+                configMapKeyRef:
+                  name: nginx-config
+                  key: msg
