@@ -1,0 +1,4 @@
+apiVersion: v2
+name: guestbook
+description: This deploys the guesbook redis cluster with frontend
+version: 1.0.0

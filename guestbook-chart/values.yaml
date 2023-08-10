@@ -1,0 +1,44 @@
+frontend:
+  replicaCount: 3
+  service:
+    type: NodePort
+    port: 80
+  image: gcr.io/google-samples/gb-frontend:v4
+  ports:
+    
+    - containerPort: 8080
+      name: web
+
+    - containerPort: 8089
+      name: metric
+
+
+redis:
+  master:
+    service:
+      type: ClusterIP
+      port: 6379
+      targetPort: 6379
+    image: redis
+  replica:
+    count: 2
+    service:
+      port: 6379
+      targetPort: 6379
+    image: gcr.io/google_samples/gb-redisslave:v1
+    resources:
+      requests:
+        cpu: 100m
+        memory: 100Mi
+    env:
+      - name: GET_HOSTS_FROM
+        value: dns
+    
+serviceAccount:
+  name: guestbook
+  
+
+    
+
+
+      
