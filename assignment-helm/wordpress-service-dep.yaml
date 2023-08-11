@@ -38,7 +38,7 @@ metadata:
 spec:
   containers:
   - name: wordpress
-    image: sourabh4584/wordpress:v1
+    image: sourabh4584/wordpress:v2
     resources:
       limits:
         memory: "800Mi"
