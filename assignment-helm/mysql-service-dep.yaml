@@ -5,7 +5,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: myapp
+    app.kubernetes.io/name: mysql
   ports:
   - port: 3306
     targetPort: 3306
@@ -45,5 +45,4 @@ spec:
     envFrom:
       - secretRef:
           name: mysql-secret
-    
-
+    magePullPolicy: IfNotPresent
