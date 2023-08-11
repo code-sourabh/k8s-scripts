@@ -9,7 +9,7 @@ spec:
   ports:
   - port: 80
     targetPort: 80
-    nodePort: 30001
+    nodePort: 30003
 
 ---
 
@@ -24,8 +24,8 @@ data:
   WORDPRESS_DB_NAME: d29yZHByZXNz
 stringData:
   WORDPRESS_DB_HOST: mysql-service
-  WORDPRESS_REDIS_NAME: redis-service
-  WORDPRESS_REDIS_PORT: "6379"
+  # WORDPRESS_REDIS_NAME: redis-service
+  # WORDPRESS_REDIS_PORT: "6379"
 
 
 ---
