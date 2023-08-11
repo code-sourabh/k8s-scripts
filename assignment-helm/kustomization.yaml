@@ -1,4 +1,5 @@
 resources:
+  - wordpress-config.yaml
   - mysql-service-dep.yaml
   - redis-service-dep.yaml
   - wordpress-service-dep.yaml

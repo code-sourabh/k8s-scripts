@@ -1,15 +1,31 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: wordpress-service
+  name: wordpress
+  labels:
+    app: wordpress
 spec:
-  type: NodePort
-  selector:
-    app.kubernetes.io/name: wordpress
   ports:
-  - port: 80
-    targetPort: 80
-    nodePort: 30003
+    - port: 80
+  selector:
+    app: wordpress
+    tier: frontend
+  type: LoadBalancer
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wp-pv-claim
+  labels:
+    app: wordpress
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
 
 ---
 
@@ -19,37 +35,68 @@ metadata:
   name: wordpress-secret
 type: Opaque
 data:
-  WORDPRESS_DB_USER: c291cmFiaA==
-  WORDPRESS_DB_PASSWORD: c291cmFiaA==
-  WORDPRESS_DB_NAME: d29yZHByZXNz
-stringData:
-  WORDPRESS_DB_HOST: mysql-service
-  # WORDPRESS_REDIS_NAME: redis-service
-  # WORDPRESS_REDIS_PORT: "6379"
-
+  wordpress-db-password: c291cmFiaA==
 
 ---
-apiVersion: v1
-kind: Pod
+
+
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: wordpress
   labels:
-    app.kubernetes.io/name: wordpress
+    app: wordpress
 spec:
-  containers:
-  - name: wordpress
-    image: wordpress:latest
-    resources:
-      limits:
-        memory: "800Mi"
-        cpu: "800m"
-      requests:
-        memory: "500Mi"
-        cpu: "500m"
-    ports:
-      - containerPort: 80
-    envFrom:
-      - secretRef:
-          name: wordpress-secret
-    imagePullPolicy: IfNotPresent
-        
+  selector:
+    matchLabels:
+      app: wordpress
+      tier: frontend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: wordpress
+        tier: frontend
+    spec:
+      containers:
+      - image: wordpress:latest
+        name: wordpress
+        resources:
+          limits:
+            memory: "800Mi"
+            cpu: "800m"
+          requests:
+            memory: "500Mi"
+            cpu: "500m"
+        env:
+        - name: WORDPRESS_DB_HOST
+          value: wordpress-mysql
+        - name: WORDPRESS_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: wordpress-secret
+              key: wordpress-db-password
+        - name: WORDPRESS_DB_USER
+          value: wordpress
+        - name: WORDPRESS_DB_NAME
+          value: wordpress
+        ports:
+        - containerPort: 80
+          name: wordpress
+        volumeMounts:
+        - name: wordpress-persistent-storage
+          mountPath: /var/www/html
+        - name: wp-config
+          mountPath: /var/www/html/wp-config.php
+          subPath: wp-config.php
+      volumes:
+      - name: wordpress-persistent-storage
+        persistentVolumeClaim:
+          claimName: wp-pv-claim
+      - name: wp-config
+        configMap:
+          name: wordpress-config
+          items:
+          - key: wp-config.php
+            path: wp-config.php
