@@ -45,4 +45,4 @@ spec:
     envFrom:
       - secretRef:
           name: mysql-secret
-    magePullPolicy: IfNotPresent
+    imagePullPolicy: IfNotPresent
