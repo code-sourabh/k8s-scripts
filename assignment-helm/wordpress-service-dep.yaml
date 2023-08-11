@@ -38,11 +38,14 @@ metadata:
 spec:
   containers:
   - name: wordpress
-    image: sourabh4584/wordpress:v2
+    image: wordpress:latest
     resources:
       limits:
         memory: "800Mi"
         cpu: "800m"
+      requests:
+        memory: "500Mi"
+        cpu: "500m"
     ports:
       - containerPort: 80
     envFrom:
