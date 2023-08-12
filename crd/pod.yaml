@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sleep
+spec:
+  serviceAccountName: deployment-client
+  containers:
+  - name: testing
+    image: sourabh4584/deployment-scale-cron-job:v6-linux-amd64
+    imagePullPolicy: IfNotPresent
+    command: ["sleep", "10000"]
+    resources:
+      limits:
+        memory: "200Mi"
+        cpu: "500m"
+      requests:
+        memory: "100Mi"
+        cpu: "250m"

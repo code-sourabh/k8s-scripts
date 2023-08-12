@@ -19,18 +19,20 @@ try:
 
 except config.config_exception.ConfigException:
     configuration = client.Configuration()
-    with open(os.path.join(SERVICE_ACCOUNT, "token")) as f:
-        token = f.read()
+    try:
+        with open(os.path.join(SERVICE_ACCOUNT, "token")) as f:
+            token = f.read()
+    except FileNotFoundError:
+        logger.error("Neither found kube config file nor the token")
+        sys.exit(1)
+
     configuration.api_key["authorization"] = token
     configuration.api_key_prefix['authorization'] = 'Bearer'
 
     with open(os.path.join(SERVICE_ACCOUNT, "namespace")) as f:
         namespace = f.read()
 
-    with open(os.path.join(SERVICE_ACCOUNT, "ca.crt")) as f:
-        ca_crt = f.read()
-
-    configuration.ssl_ca_cert = ca_crt
+    configuration.ssl_ca_cert = os.path.join(SERVICE_ACCOUNT, "ca.crt")
     configuration.host = "https://kubernetes.default.svc"
 
     api_instance = client.AppsV1Api(client.ApiClient(configuration))

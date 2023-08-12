@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: scale-up
+spec:
+  schedule: "30 10 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          activeDeadlineSeconds: 20
+          serviceAccountName: deployment-client
+          containers:
+          - name: scale-up
+            image: sourabh4584/deployment-scale-cron-job:v6-linux-amd64
+            imagePullPolicy: IfNotPresent
+            resources:
+              limits:
+                memory: "200Mi"
+                cpu: "500m"
+              requests:
+                memory: "100Mi"
+                cpu: "250m"
+            command:
+            - python3
+            - scale.py
+            - nginx
+            - "2"
+          restartPolicy: OnFailure
