@@ -1,0 +1,13 @@
+apiVersion: v2
+name: wordpress-sql-redis
+description: This deploys the wordpress with MYsql and redis.
+version: 1.0.0
+dependencies:
+  - name: MySQL
+    version: .0.0
+    repository: "file://charts/MySQL-1.0.0.tgz"
+
+  - name: Redis
+    version: 1.0.0
+    repository: "file://charts/Redis-1.0.0.tgz"
+    

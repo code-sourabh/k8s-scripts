@@ -1,0 +1,4 @@
+apiVersion: v1
+name: MySQL
+description: This deploys the MySQL..
+version: 1.0.0

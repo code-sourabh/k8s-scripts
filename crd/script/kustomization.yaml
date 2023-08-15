@@ -3,3 +3,4 @@ resources:
   - nginx-deployment.yaml
   - cron-job-scale-down.yaml
   - cron-job-scale-up.yaml
+  - testing-pod.yaml

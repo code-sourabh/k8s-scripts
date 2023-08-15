@@ -1,0 +1,5 @@
+resources:
+  - ./templates/wordpress-config.yaml
+  - ./templates/mysql-service-dep.yaml
+  - ./templates/redis-service-dep.yaml
+  - ./templates/wordpress-service-dep.yaml

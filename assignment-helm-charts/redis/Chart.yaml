@@ -1,0 +1,4 @@
+apiVersion: v1
+name: Redis
+description: This deploys the Redis...
+version: 1.0.0

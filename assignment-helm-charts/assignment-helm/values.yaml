@@ -1,0 +1,13 @@
+global:
+    
+    
+
+
+wordpress:
+    labels:
+        app: wordpress
+        tier: frontend
+
+
+        
+       

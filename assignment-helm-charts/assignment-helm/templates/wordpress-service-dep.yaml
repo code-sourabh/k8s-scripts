@@ -45,19 +45,19 @@ kind: Deployment
 metadata:
   name: wordpress
   labels:
-    app: wordpress
+    app: {{ .Values.wordpress.labels.app }}
 spec:
   selector:
     matchLabels:
-      app: wordpress
-      tier: frontend
+      app: {{ .Values.wordpress.labels.app }}
+      tier: {{ .Values.wordpress.labels.tier }}
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: wordpress
-        tier: frontend
+        app: {{ .Values.wordpress.labels.app }}
+        tier: {{ .Values.wordpress.labels.tier }}
     spec:
       containers:
       - image: wordpress:latest
