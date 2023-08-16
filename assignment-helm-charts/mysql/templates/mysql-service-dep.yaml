@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
-metadata:
+metadata: 
   name: wordpress-mysql
   labels:
-    app: {{ .Values.labels.apps }}
+    app: {{ .Values.labels.app }}
 spec:
   ports:
-    - port: {{ .Values.labels.port }}
+    - port: {{ .Values.port }}
   selector:
-    app: {{ .Values.labels.apps }}
+    app: {{ .Values.labels.app }}
     tier: {{ .Values.labels.tier }}
   clusterIP: None
 
@@ -18,7 +18,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: mysql-pv-claim
   labels:
-    app: wordpress
+    app: {{ .Values.labels.app }}
 spec:
   accessModes:
     - ReadWriteOnce
@@ -27,7 +27,6 @@ spec:
       storage: 20Gi
 
 ---
-
 apiVersion: v1
 kind: Secret
 metadata:
@@ -44,18 +43,18 @@ kind: Deployment
 metadata:
   name: wordpress-mysql
   labels:
-    app: {{ .Values.labels.apps }}
+    app: {{ .Values.labels.app }}
 spec:
   selector:
     matchLabels:
-      app: {{ .Values.labels.apps }}
+      app: {{ .Values.labels.app }}
       tier: {{ .Values.labels.tier }}
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: {{ .Values.labels.apps }}
+        app: {{ .Values.labels.app }}
         tier: {{ .Values.labels.tier }}
     spec:
       containers:

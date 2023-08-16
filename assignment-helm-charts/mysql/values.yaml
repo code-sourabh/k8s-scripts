@@ -1,5 +1,5 @@
 labels:
-  apps: wordpress
+  app: wordpress
   tier: mysql
  
 port: 3306
