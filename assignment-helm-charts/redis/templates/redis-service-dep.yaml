@@ -3,13 +3,13 @@ kind: Service
 metadata:
   name: wordpress-redis
   labels:
-    app: wordpress
+    app: {{ .Values.labels.app }}
 spec:
   ports:
-    - port: 6379
+    - port: {{ .Values.port }}
   selector:
-    app: wordpress
-    tier: redis
+    app: {{ .Values.labels.app }}
+    tier: {{ .Values.labels.tier }}
   clusterIP: None
 
 ---
@@ -17,10 +17,10 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: redis
+  name: {{ .Values.labels.tier }}
   labels:
-    app: wordpress
-    tier: redis
+    app: {{ .Values.labels.app }}
+    tier: {{ .Values.labels.tier }}
 spec:
   containers:
   - name: redis
@@ -30,6 +30,6 @@ spec:
         memory: "500Mi"
         cpu: "500m"
     ports:
-      - containerPort: 6379
+      - containerPort: {{ .Values.port }}
     imagePullPolicy: IfNotPresent
 

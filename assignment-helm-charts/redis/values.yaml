@@ -1,0 +1,5 @@
+labels:
+  app: wordpress
+  tier: redis
+ 
+port: 6379
