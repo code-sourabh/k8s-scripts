@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+    generateName: app-slack-notification
+    annotations: 
+        argocd.argoproj.io/hook: PostSync
+        argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+    template:
+        spec:
+            containers:
+            - name: flock-notification
+            image: curlimages/curl
+            command:
+                - "curl"
+                - "-X"
+                - "POST"
+                - "https://api.flock.com/hooks/sendMessage/b609601e-5bef-45ef-9733-732568901461"
+                - "-H"
+                - "Content-Type: application/json"
+                - "-d"
+                - '{"text": "Sourabh -> Post sync hook executed successfully"}'
+            
+            restartPolicy: Never
+        backoffLimit: 2
