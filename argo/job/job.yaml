@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-    generateName: app-slack-notification
+    generateName: flock-notification-
     annotations: 
         argocd.argoproj.io/hook: PostSync
         argocd.argoproj.io/hook-delete-policy: HookSucceeded
@@ -10,8 +10,8 @@ spec:
         spec:
             containers:
             - name: flock-notification
-            image: curlimages/curl
-            command:
+              image: curlimages/curl
+              command:
                 - "curl"
                 - "-X"
                 - "POST"
